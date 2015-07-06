@@ -1,6 +1,7 @@
 package com.app.chatroom.mgmusic;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.apache.http.client.ClientProtocolException;
@@ -25,10 +26,12 @@ import com.cmsc.cmmusic.common.MusicQueryInterface;
 import com.cmsc.cmmusic.common.data.MusicInfo;
 import com.cmsc.cmmusic.common.data.MusicListRsp;
 import com.cmsc.cmmusic.common.demo.R;
+
 /**
  * 音乐列表
+ * 
  * @author Administrator
- *
+ * 
  */
 public class MusicListActivity extends Activity {
 	String ChartCode = "";
@@ -132,7 +135,7 @@ public class MusicListActivity extends Activity {
 					if (musicInfoList != null) {
 						musicListAdapter = new MusicListAdapter(
 								MusicListActivity.this, musicInfoList,
-								musiclist_listview);
+								musiclist_listview, mlistener);
 						musiclist_listview.setAdapter(musicListAdapter);
 						musiclist_listview.requestLayout();
 					} else {
@@ -170,4 +173,18 @@ public class MusicListActivity extends Activity {
 			}
 		}
 	};
+
+	OnClickListener mlistener = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+
+			MusicInfo mInfo = (MusicInfo) v.getTag();
+			Intent intent = new Intent(getApplicationContext(),MusicMenuActivity.class);
+			intent.putExtra("musicid", mInfo.getMusicId());
+			startActivity(intent);
+		}
+	};
+
 }
