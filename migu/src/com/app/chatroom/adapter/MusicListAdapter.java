@@ -29,12 +29,12 @@ public class MusicListAdapter extends BaseAdapter {
 	ListView lv;
 
 	public MusicListAdapter(MusicListActivity c, ArrayList<MusicInfo> list,
-			ListView listview) {
+			ListView listview, OnClickListener lis) {
 		this.context = c;
 		this.list = list;
 		this.lv = listview;
 		li = LayoutInflater.from(context);
-
+		this.listener = lis;
 	}
 
 	@Override
@@ -75,26 +75,28 @@ public class MusicListAdapter extends BaseAdapter {
 					.findViewById(R.id.music_items_level_imageView);
 			viewHolder.musicLevelText = (TextView) convertView
 					.findViewById(R.id.music_items_level_textView);
-			viewHolder.musicDescTextView = (TextView) convertView
-					.findViewById(R.id.music_items_desc_textView);
 			viewHolder.musicClickImage = (ImageView) convertView
 					.findViewById(R.id.music_items_facemask);
+			viewHolder.musicMoreImage = (ImageView) convertView
+					.findViewById(R.id.music_items_more_ImageView);
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder2) convertView.getTag();
 		}
-		viewHolder.musicTitleTextView.setText(list.get(position).getSongName());//歌曲名称
-		viewHolder.musicNameTextView.setText(list.get(position).getSingerName());//歌手名称
-		viewHolder.musicDescTextView.setText("全曲有效期:"+list.get(position).getSongValidity());//全曲有效期
-		if ("0".equals(list.get(position).getHasDolby())) {
-			viewHolder.musicCountTextView.setText("杜比音效：无");//杜比音效
-		} else {
-			viewHolder.musicCountTextView.setText("杜比音效：有");//杜比音效
-		}
-		
+		viewHolder.musicTitleTextView.setText(list.get(position).getSongName());// 歌曲名称
+		viewHolder.musicNameTextView
+				.setText(list.get(position).getSingerName());// 歌手名称
+		// if ("0".equals(list.get(position).getHasDolby())) {
+		// viewHolder.musicCountTextView.setText("杜比音效：无");// 杜比音效
+		// } else {
+		// viewHolder.musicCountTextView.setText("杜比音效：有");// 杜比音效
+		// }
+
 		viewHolder.musicLevelText.setText(position + 1 + "");
-		viewHolder.musicClickImage.setTag(musicBean);
-		viewHolder.musicClickImage.setOnClickListener(listener);
+		// viewHolder.musicClickImage.setTag(musicBean);
+		// viewHolder.musicClickImage.setOnClickListener(listener);
+		viewHolder.musicMoreImage.setTag(musicBean);
+		viewHolder.musicMoreImage.setOnClickListener(listener);
 		return convertView;
 	}
 
@@ -107,6 +109,7 @@ public class MusicListAdapter extends BaseAdapter {
 		public RelativeLayout musicLevelImage;
 		public TextView musicLevelText;
 		public ImageView musicClickImage;
+		public ImageView musicMoreImage;
 	}
 
 }
