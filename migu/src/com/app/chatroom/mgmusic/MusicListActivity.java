@@ -1,14 +1,12 @@
 package com.app.chatroom.mgmusic;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.apache.http.client.ClientProtocolException;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -17,7 +15,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.app.chatroom.adapter.MusicListAdapter;
 import com.app.chatroom.contants.ConstantsJrc;
@@ -41,6 +42,11 @@ public class MusicListActivity extends Activity {
 	public ArrayList<MusicInfo> musicInfoList = new ArrayList<MusicInfo>();// 歌曲列表
 	MusicListAdapter musicListAdapter;
 	GetListThread getListThread;
+	RelativeLayout music_play_RelativeLayout;
+	ProgressBar music_list_progressBar;
+	ImageButton music_list_play_ImageView;
+	ImageButton music_list_next_ImageView;
+	MusicPlayer musicPlayer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +60,7 @@ public class MusicListActivity extends Activity {
 		System.out.println("歌单ID:" + ChartCode);
 		getListThread = new GetListThread();
 		getListThread.start();
-
+		musicPlayer = new MusicPlayer(music_list_progressBar);
 		musiclist_listview.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -63,14 +69,18 @@ public class MusicListActivity extends Activity {
 				// TODO Auto-generated method stub
 				MusicInfo m = musicListAdapter.list.get(position);
 				System.out.println(m);
+				if (music_play_RelativeLayout.getVisibility() == View.GONE) {
+					music_play_RelativeLayout.setVisibility(View.VISIBLE);
+				}
+				musicPlayer.playUrl(m.getSongListenDir());
 
-				Intent intent = new Intent();
-				intent.setAction("android.intent.action.VIEW");
-				Uri content_url = Uri
-						.parse("http://m.12530.com/order/web/in/0022181/ "
-								+ m.getMusicId() + "/0001/");
-				intent.setData(content_url);
-				startActivity(intent);
+				// Intent intent = new Intent();
+				// intent.setAction("android.intent.action.VIEW");
+				// Uri content_url = Uri
+				// .parse("http://m.12530.com/order/web/in/0022181/ "
+				// + m.getMusicId() + "/0001/");
+				// intent.setData(content_url);
+				// startActivity(intent);
 			}
 		});
 	}
@@ -152,6 +162,10 @@ public class MusicListActivity extends Activity {
 		musiclist_close_btn = (ImageButton) findViewById(R.id.musiclist_close_btn);
 		musiclist_progressbar_RelativeLayout = (RelativeLayout) findViewById(R.id.musiclist_progressbar_RelativeLayout);
 		musiclist_listview = (ListView) findViewById(R.id.musiclist_listview);
+		music_list_progressBar = (ProgressBar) findViewById(R.id.music_list_progressBar);
+		music_list_next_ImageView = (ImageButton) findViewById(R.id.music_list_next_ImageView);
+		music_list_play_ImageView = (ImageButton) findViewById(R.id.music_list_play_ImageView);
+		music_play_RelativeLayout = (RelativeLayout) findViewById(R.id.music_play_RelativeLayout);
 	}
 
 	void initListener() {
@@ -167,7 +181,10 @@ public class MusicListActivity extends Activity {
 			case R.id.musiclist_close_btn:
 				finish();
 				break;
-
+			case R.id.music_list_play_ImageView:
+				break;
+			case R.id.music_list_next_ImageView:
+				break;
 			default:
 				break;
 			}
@@ -181,10 +198,21 @@ public class MusicListActivity extends Activity {
 			// TODO Auto-generated method stub
 
 			MusicInfo mInfo = (MusicInfo) v.getTag();
-			Intent intent = new Intent(getApplicationContext(),MusicMenuActivity.class);
+			Intent intent = new Intent(getApplicationContext(),
+					MusicMenuActivity.class);
 			intent.putExtra("musicid", mInfo.getMusicId());
 			startActivity(intent);
 		}
 	};
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (musicPlayer != null) {
+			musicPlayer.stop();
+			musicPlayer = null;
+		}
+	}
+	// 进度改变
 
 }

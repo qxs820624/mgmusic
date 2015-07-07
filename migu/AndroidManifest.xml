@@ -70,12 +70,15 @@
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyleBottom" />
-         <activity
+        <activity
             android:name="com.app.chatroom.mgmusic.MusicMenuActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyleBottom" />
+        <activity
+            android:name="com.app.chatroom.mgmusic.MusicPayDialog"
+            android:theme="@style/MyDialogStyle" />
     </application>
 
 </manifest>

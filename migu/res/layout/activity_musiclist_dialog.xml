@@ -63,7 +63,7 @@
             android:id="@+id/musiclist_listview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_centerVertical="true"
+            android:layout_above="@+id/music_play_RelativeLayout"
             android:cacheColorHint="#0000"
             android:divider="@null"
             android:dividerHeight="1.0dip"
@@ -91,6 +91,76 @@
             android:layout_alignLeft="@+id/musiclist_listview"
             android:layout_alignRight="@+id/musiclist_listview"
             android:background="@drawable/systemweb_bottom_effect" />
+
+        <RelativeLayout
+            android:id="@+id/music_play_RelativeLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="55dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:visibility="visible" >
+
+            <ProgressBar
+                android:id="@+id/music_list_progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="55dp"
+                android:progressDrawable="@anim/music_play_bar" />
+
+            <ImageButton
+                android:id="@+id/music_list_next_ImageView"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/music_next_btn_bg" />
+
+            <ImageView
+                android:id="@+id/music_list_logo_ImageView"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/default_icon_item_notification" />
+
+            <ImageButton
+                android:id="@+id/music_list_play_ImageView"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:layout_toLeftOf="@+id/music_list_next_ImageView"
+                android:background="@drawable/music_play_btn_bg" />
+
+            <TextView
+                android:id="@+id/music_list_musicname_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/music_list_logo_ImageView"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/music_list_logo_ImageView"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:text="小"
+                android:textColor="#833a16"
+                android:textSize="18dp" />
+
+            <com.duom.fjz.iteminfo.MarqueeTextView
+                android:id="@+id/music_list_singername_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/music_list_logo_ImageView"
+                android:layout_alignLeft="@+id/music_list_musicname_tv"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:text="大"
+                android:textColor="#833a16"
+                android:textSize="14dp" />
+
+        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
