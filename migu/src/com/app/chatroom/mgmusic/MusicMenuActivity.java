@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.app.chatroom.util.Commond;
 import com.cmsc.cmmusic.common.CMMusicCallback;
+import com.cmsc.cmmusic.common.FullSongManagerInterface;
 import com.cmsc.cmmusic.common.RingbackManagerInterface;
+import com.cmsc.cmmusic.common.data.DownloadResult;
 import com.cmsc.cmmusic.common.data.Result;
 import com.cmsc.cmmusic.common.demo.CMMusicDemo;
 import com.cmsc.cmmusic.common.demo.R;
@@ -53,11 +57,29 @@ public class MusicMenuActivity extends Activity {
 			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.music_list_menu_cl_btn:
-				
+				Intent intent = new Intent(getApplicationContext(),
+						MusicPayDialog.class);
+				intent.putExtra("musicId", musicId);
+				intent.putExtra("type", 0);
+				startActivity(intent);
 				break;
 			case R.id.music_list_menu_sj_btn:
+				FullSongManagerInterface.getFullSongDownloadUrlByNet(
+						MusicMenuActivity.this, musicId, false,
+						new CMMusicCallback<DownloadResult>() {
+							@Override
+							public void operationResult(
+									final DownloadResult downloadResult) {
+								if (null != downloadResult) {
+									Commond.showToast(getApplicationContext(),
+											downloadResult.getResMsg());
+								}
+
+							}
+						});
 				break;
 			case R.id.music_list_menu_cancel_btn:
+				finish();
 				break;
 			default:
 				break;
