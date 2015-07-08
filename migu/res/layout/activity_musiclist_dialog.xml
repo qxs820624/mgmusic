@@ -99,7 +99,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:gravity="center_vertical"
-            android:visibility="visible" >
+            android:visibility="gone" >
 
             <ProgressBar
                 android:id="@+id/music_list_progressBar"
@@ -135,31 +135,45 @@
                 android:layout_toLeftOf="@+id/music_list_next_ImageView"
                 android:background="@drawable/music_play_btn_bg" />
 
-            <TextView
-                android:id="@+id/music_list_musicname_tv"
+            <ProgressBar
+                android:id="@+id/music_list_audio_progressbar"
+                style="@android:style/Widget.ProgressBar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:layout_toLeftOf="@+id/music_list_next_ImageView"
+                android:indeterminateDrawable="@drawable/audio_progress_draw"
+                android:visibility="gone" />
+
+            <com.duom.fjz.iteminfo.MarqueeTextView
+                android:id="@+id/music_list_musicname_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/music_list_logo_ImageView"
-                android:layout_marginLeft="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toLeftOf="@+id/music_list_play_ImageView"
                 android:layout_toRightOf="@+id/music_list_logo_ImageView"
+                marqueeRepeatLimit="marquee_forever"
                 android:ellipsize="marquee"
                 android:singleLine="true"
-                android:text="小"
-                android:textColor="#833a16"
-                android:textSize="18dp" />
+                android:text="..."
+                android:textColor="@color/black"
+                android:textSize="18.0dip" />
 
             <com.duom.fjz.iteminfo.MarqueeTextView
-                android:id="@+id/music_list_singername_tv"
+                android:id="@+id/music_list_singername_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/music_list_logo_ImageView"
-                android:layout_alignLeft="@+id/music_list_musicname_tv"
+                android:layout_alignLeft="@+id/music_list_musicname_textView"
+                android:layout_alignRight="@+id/music_list_musicname_textView"
+                marqueeRepeatLimit="marquee_forever"
                 android:ellipsize="marquee"
                 android:singleLine="true"
-                android:text="大"
+                android:text="..."
                 android:textColor="#833a16"
                 android:textSize="14dp" />
-
         </RelativeLayout>
     </RelativeLayout>
 
