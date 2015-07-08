@@ -17,8 +17,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.app.chatroom.adapter.MusicListAdapter;
 import com.app.chatroom.contants.ConstantsJrc;
@@ -27,6 +25,7 @@ import com.cmsc.cmmusic.common.MusicQueryInterface;
 import com.cmsc.cmmusic.common.data.MusicInfo;
 import com.cmsc.cmmusic.common.data.MusicListRsp;
 import com.cmsc.cmmusic.common.demo.R;
+import com.duom.fjz.iteminfo.MarqueeTextView;
 
 /**
  * 音乐列表
@@ -47,6 +46,11 @@ public class MusicListActivity extends Activity {
 	ImageButton music_list_play_ImageView;
 	ImageButton music_list_next_ImageView;
 	MusicPlayer musicPlayer;
+	MarqueeTextView music_list_musicname_textView;
+	MarqueeTextView music_list_singername_textView;
+	int musicSelectPosition;
+	ProgressBar music_list_audio_progressbar;
+	PlayMusicThread plyaMusicThread;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,22 +71,18 @@ public class MusicListActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
+				musicSelectPosition = position;
 				MusicInfo m = musicListAdapter.list.get(position);
 				System.out.println(m);
 				if (music_play_RelativeLayout.getVisibility() == View.GONE) {
 					music_play_RelativeLayout.setVisibility(View.VISIBLE);
 				}
-				musicPlayer.playUrl(m.getSongListenDir());
+				plyaMusicThread = new PlayMusicThread(musicInfoList);
+				plyaMusicThread.start();
 
-				// Intent intent = new Intent();
-				// intent.setAction("android.intent.action.VIEW");
-				// Uri content_url = Uri
-				// .parse("http://m.12530.com/order/web/in/0022181/ "
-				// + m.getMusicId() + "/0001/");
-				// intent.setData(content_url);
-				// startActivity(intent);
 			}
 		});
+
 	}
 
 	private class GetListThread extends Thread {
@@ -121,6 +121,7 @@ public class MusicListActivity extends Activity {
 				try {
 					musiclist_progressbar_RelativeLayout
 							.setVisibility(View.GONE);
+					getListThread.stopThread(true);
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
@@ -158,6 +159,79 @@ public class MusicListActivity extends Activity {
 		});
 	}
 
+	private class PlayMusicThread extends Thread {
+		private boolean _run = true;
+		private ArrayList<MusicInfo> list = new ArrayList<MusicInfo>();
+
+		public void stopThread(boolean run) {
+			this._run = !run;
+		}
+
+		public PlayMusicThread(ArrayList<MusicInfo> ls) {
+			// TODO Auto-generated constructor stub
+			this.list = ls;
+		}
+
+		@Override
+		public void run() {
+			if (_run) {
+				try {
+					playmucisfun(list);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private Handler musichandler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			int what = msg.what;
+			switch (what) {
+			case ConstantsJrc.HANDLER_SHOW_PROGRESS:
+				try {
+					music_list_audio_progressbar.setVisibility(View.VISIBLE);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				break;
+			case ConstantsJrc.HANDLER_CANCEL_PROGRESS:
+				try {
+					music_list_audio_progressbar.setVisibility(View.GONE);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				break;
+			}
+		};
+	};
+
+	private void playmucisfun(final ArrayList<MusicInfo> ls)
+			throws ClientProtocolException, IOException {
+		musichandler.sendEmptyMessage(ConstantsJrc.HANDLER_SHOW_PROGRESS);
+
+		musicPlayer.playUrl(ls.get(musicSelectPosition).getSongListenDir());
+		musichandler.sendEmptyMessage(ConstantsJrc.HANDLER_CANCEL_PROGRESS);
+		musichandler.post(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+
+					music_list_play_ImageView
+							.setBackgroundResource(R.drawable.music_pause_btn_bg);
+					music_list_singername_textView.setText(ls.get(
+							musicSelectPosition).getSingerName());
+					music_list_musicname_textView.setText(ls.get(
+							musicSelectPosition).getSongName());
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		});
+	}
+
 	void initView() {
 		musiclist_close_btn = (ImageButton) findViewById(R.id.musiclist_close_btn);
 		musiclist_progressbar_RelativeLayout = (RelativeLayout) findViewById(R.id.musiclist_progressbar_RelativeLayout);
@@ -166,10 +240,15 @@ public class MusicListActivity extends Activity {
 		music_list_next_ImageView = (ImageButton) findViewById(R.id.music_list_next_ImageView);
 		music_list_play_ImageView = (ImageButton) findViewById(R.id.music_list_play_ImageView);
 		music_play_RelativeLayout = (RelativeLayout) findViewById(R.id.music_play_RelativeLayout);
+		music_list_musicname_textView = (MarqueeTextView) findViewById(R.id.music_list_musicname_textView);
+		music_list_singername_textView = (MarqueeTextView) findViewById(R.id.music_list_singername_textView);
+		music_list_audio_progressbar = (ProgressBar) findViewById(R.id.music_list_audio_progressbar);
 	}
 
 	void initListener() {
 		musiclist_close_btn.setOnClickListener(listener);
+		music_list_play_ImageView.setOnClickListener(listener);
+		music_list_next_ImageView.setOnClickListener(listener);
 	}
 
 	OnClickListener listener = new OnClickListener() {
@@ -182,8 +261,26 @@ public class MusicListActivity extends Activity {
 				finish();
 				break;
 			case R.id.music_list_play_ImageView:
+				if (musicPlayer.isPlay()) {
+					musicPlayer.pause();
+					music_list_play_ImageView
+							.setBackgroundResource(R.drawable.music_play_btn_bg);
+				} else {
+					musicPlayer.play();
+					music_list_play_ImageView
+							.setBackgroundResource(R.drawable.music_pause_btn_bg);
+				}
 				break;
 			case R.id.music_list_next_ImageView:
+				musicSelectPosition++;
+				System.out.println("第" + musicSelectPosition + "个");
+				if (musicSelectPosition >= musicInfoList.size()) {
+					Commond.showToast(getApplicationContext(), "已经是最后一首了");
+					return;
+				} else {
+					plyaMusicThread = new PlayMusicThread(musicInfoList);
+					plyaMusicThread.start();
+				}
 				break;
 			default:
 				break;
@@ -213,6 +310,5 @@ public class MusicListActivity extends Activity {
 			musicPlayer = null;
 		}
 	}
-	// 进度改变
 
 }
