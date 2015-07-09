@@ -21,10 +21,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/mgyyb_title" />
+                android:background="@drawable/jrdt_title" />
 
             <ImageButton
-                android:id="@+id/musiclist_close_btn"
+                android:id="@+id/zjlist_close_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -33,7 +33,7 @@
                 android:background="@drawable/chatroom_userinfo_dialog_back_btn" />
 
             <ImageButton
-                android:id="@+id/musiclist_applay_btn"
+                android:id="@+id/zjlist_applay_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -60,7 +60,7 @@
         android:layout_marginTop="5dp" >
 
         <ListView
-            android:id="@+id/musiclist_listview"
+            android:id="@+id/zjlist_listview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_above="@+id/music_play_RelativeLayout"
@@ -78,18 +78,18 @@
             android:id="@+id/imageView6"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/musiclist_listview"
-            android:layout_alignRight="@+id/musiclist_listview"
-            android:layout_alignTop="@+id/musiclist_listview"
+            android:layout_alignLeft="@+id/zjlist_listview"
+            android:layout_alignRight="@+id/zjlist_listview"
+            android:layout_alignTop="@+id/zjlist_listview"
             android:background="@drawable/systemweb_top_effect" />
 
         <ImageView
             android:id="@+id/imageView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/musiclist_listview"
-            android:layout_alignLeft="@+id/musiclist_listview"
-            android:layout_alignRight="@+id/musiclist_listview"
+            android:layout_alignBottom="@+id/zjlist_listview"
+            android:layout_alignLeft="@+id/zjlist_listview"
+            android:layout_alignRight="@+id/zjlist_listview"
             android:background="@drawable/systemweb_bottom_effect" />
 
         <RelativeLayout
@@ -178,7 +178,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/musiclist_progressbar_RelativeLayout"
+        android:id="@+id/zjlist_progressbar_RelativeLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -192,7 +192,7 @@
             android:orientation="vertical" >
 
             <ProgressBar
-                android:id="@+id/musiclist__progressbar"
+                android:id="@+id/zjlist__progressbar"
                 style="@android:style/Widget.ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
